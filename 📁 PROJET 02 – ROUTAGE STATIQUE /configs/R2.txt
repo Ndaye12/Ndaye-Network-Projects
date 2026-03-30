@@ -1,0 +1,51 @@
+hostname R2
+!
+no ip domain lookup
+ipv6 unicast-routing
+!
+banner motd # This is R2, Investigate Static Routes #
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+ exit
+!
+line vty 0 4
+ privilege level 15
+ password cisco123
+ exec-timeout 0 0
+ logging synchronous
+ login
+ exit
+!
+interface f0/0
+ description Link to R1
+ ip address 10.1.2.2 255.255.255.0
+ ipv6 address fe80::2:1 link-local
+ ipv6 address 2001:db8:acad:1012::2/64
+ no shutdown
+ exit
+!
+interface f1/0
+ description Link to R3
+ ip address 10.2.3.2 255.255.255.0
+ ipv6 address fe80::2:2 link-local
+ ipv6 address 2001:db8:acad:1023::2/64
+ no shutdown
+ exit
+!
+interface loopback 0
+ ip address 192.168.2.1 255.255.255.224
+ ipv6 address fe80::2:3 link-local
+ ipv6 address 2001:db8:acad:2000::1/64
+ exit
+!
+! Routes statiques
+ip route 192.168.1.0 255.255.255.224 10.1.2.1
+ip route 192.168.3.0 255.255.255.224 10.2.3.3
+!
+ipv6 route 2001:db8:acad:1000::/64 2001:db8:acad:1012::1
+ipv6 route 2001:db8:acad:3000::/64 2001:db8:acad:1023::3
+!
+end
+write
