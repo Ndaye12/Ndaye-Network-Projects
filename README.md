@@ -46,7 +46,7 @@ Implementation of advanced static routing techniques in IPv4 and IPv6.
 ✔ Null routes for traffic control  
 ✔ IPv4 and IPv6 configuration  
 
-👉 [View Project](./📁%20PROJET%2002%20–%20ROUTAGE%20STATIQUE)
+👉 [View Project](https://github.com/Ndaye12/Ndaye-Network-Projects/tree/main/%F0%9F%93%81%20PROJET%2002%20%E2%80%93%20ROUTAGE%20STATIQUE%20)
 
 ---
 
