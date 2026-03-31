@@ -1,0 +1,42 @@
+hostname R2
+!
+no ip domain lookup
+ipv6 unicast-routing
+!
+banner motd # This is R2, GRE Tunnel Lab #
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+ exit
+!
+line vty 0 4
+ privilege level 15
+ password cisco123
+ exec-timeout 0 0
+ logging synchronous
+ login
+ exit
+!
+interface f0/0
+ description Link to R1
+ ip address 10.1.2.2 255.255.255.0
+ ipv6 address fe80::2:1 link-local
+ ipv6 address 2001:db8:acad:12::2/64
+ no shutdown
+ ip ospf 4 area 0
+ ipv6 ospf 6 area 0
+ exit
+!
+interface f1/0
+ description Link to R3
+ ip address 10.2.3.2 255.255.255.0
+ ipv6 address fe80::2:2 link-local
+ ipv6 address 2001:db8:acad:23::2/64
+ no shutdown
+ ip ospf 4 area 0
+ ipv6 ospf 6 area 0
+ exit
+!
+end
+write
