@@ -100,9 +100,9 @@ Implementation of GRE tunnels for IPv4 and IPv6 with OSPF over tunnel.
 
 ---
 
-## 🖼️ Sample Topology
+## 🏢 Multi‑Site Network Topology
 
-![Topologie globale](https://github.com/Ndaye12/Ndaye-Network-Projects/blob/main/Multi-Site-Secure-Network/Topologie/topologie.png)
+![Schéma du réseau sécurisé](https://github.com/Ndaye12/Ndaye-Network-Projects/blob/main/Multi-Site-Secure-Network/Topologie/topologie.png)
 
 ---
 
