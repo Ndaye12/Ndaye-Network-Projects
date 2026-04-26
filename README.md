@@ -34,7 +34,7 @@ I am passionate about network engineering and cybersecurity, with hands-on exper
 
 ## 🚀 Projects
 
-### 🏢 Multi-Site Secure Enterprise Network (🔥 Featured Project)
+### 🏢 Multi-Site Secure Enterprise Network🔥
 
 Full enterprise network simulation inspired by a banking infrastructure, integrating routing, redundancy, firewall security, and remote access.
 
@@ -102,7 +102,7 @@ Implementation of GRE tunnels for IPv4 and IPv6 with OSPF over tunnel.
 
 ## 🖼️ Sample Topology
 
-![Topologie globale](topologie-globale.png)
+![Topologie globale](https://github.com/Ndaye12/Ndaye-Network-Projects/blob/main/Multi-Site-Secure-Network/Topologie/topologie.png)
 
 ---
 
