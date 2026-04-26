@@ -192,7 +192,7 @@ VPCS> curl google.com
 - [R2](config/cisco/R2.txt)
 - [R3](config/cisco/R3.txt)
 - [R4](config/cisco/R4.txt)
-- [FortiGate](config/fortigate/fortigate-config.txt)
+- [FortiGate](https://github.com/Ndaye12/Ndaye-Network-Projects/blob/main/Multi-Site-Secure-Network/Config/Fortigate/fortigate-config.txt)
 
 ---
 
