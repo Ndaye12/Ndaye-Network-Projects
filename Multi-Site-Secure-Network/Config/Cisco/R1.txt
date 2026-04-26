@@ -1,0 +1,227 @@
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+aqm-register-fnf
+!
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+!
+!
+!
+ip dhcp excluded-address 192.168.10.1 192.168.10.20
+ip dhcp excluded-address 192.168.20.1 192.168.20.20
+ip dhcp excluded-address 192.168.30.1 192.168.30.20
+!
+ip dhcp pool VLAN10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1 
+ dns-server 8.8.8.8 
+!
+ip dhcp pool VLAN20
+ default-router 192.168.20.1 
+ dns-server 8.8.8.8 
+!
+ip dhcp pool VLAN30
+ network 192.168.30.0 255.255.255.0
+ default-router 192.168.30.1 
+ dns-server 8.8.8.8 
+!
+!
+!
+no ip domain lookup
+ip domain name reseau.local
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+username admin privilege 15 secret 5 $1$FMvL$2KzvZ.bYmk1hjDRZ8QdbE.
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+ip ssh version 2
+!
+class-map type inspect match-any ICMP
+ match protocol icmp
+class-map type inspect match-any SSH
+ match protocol ssh
+!
+policy-map type inspect WAN-TO-LAN
+ class class-default
+  drop log
+policy-map type inspect LAN-TO-WAN
+ class type inspect ICMP
+  inspect 
+ class type inspect SSH
+  inspect 
+ class class-default
+  pass
+!
+zone security LAN
+zone security WAN
+zone-pair security LAN-TO-WAN source LAN destination WAN
+ service-policy type inspect LAN-TO-WAN
+zone-pair security WAN-TO-LAN source WAN destination LAN
+ service-policy type inspect WAN-TO-LAN
+! 
+!
+crypto isakmp policy 10
+ encr aes 256
+ hash sha256
+ authentication pre-share
+ group 14
+ lifetime 3600
+crypto isakmp key cisco123 address 10.0.0.10      
+!
+!
+crypto ipsec transform-set IPSEC-GRE esp-aes 256 esp-sha256-hmac 
+ mode transport
+!
+crypto ipsec profile IPSEC-PROFILE
+ set transform-set IPSEC-GRE 
+!
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel0
+ ip address 172.16.0.1 255.255.255.252
+ zone-member security WAN
+ tunnel source 10.0.0.1
+ tunnel destination 10.0.0.10
+ tunnel protection ipsec profile IPSEC-PROFILE
+!
+interface FastEthernet0/0
+ ip address 10.0.0.1 255.255.255.252
+ zone-member security WAN
+ duplex half
+!
+interface FastEthernet1/0
+ ip address 10.0.0.5 255.255.255.252
+ zone-member security WAN
+ duplex auto
+ speed auto
+!
+interface FastEthernet1/1
+ ip address 192.168.10.1 255.255.255.0
+ zone-member security LAN
+ standby 1 ip 192.168.10.254
+ standby 1 priority 110
+ standby 1 preempt
+ duplex auto
+ speed auto
+!
+interface FastEthernet2/0
+ ip address 192.168.20.1 255.255.255.0
+ ip access-group 101 in
+ zone-member security LAN
+ duplex auto
+ speed auto
+!
+interface FastEthernet2/1
+ ip address 192.168.30.1 255.255.255.0
+ zone-member security LAN
+ duplex auto
+ speed auto
+!
+interface Serial3/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface GigabitEthernet4/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+router ospf 1
+ router-id 1.1.1.1
+ network 10.0.0.0 0.0.0.3 area 0
+ network 10.0.0.4 0.0.0.3 area 0
+ network 172.16.0.0 0.0.0.3 area 0
+ network 192.168.10.0 0.0.0.255 area 1
+ network 192.168.20.0 0.0.0.255 area 1
+ network 192.168.30.0 0.0.0.255 area 1
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+ip route 192.168.40.0 255.255.255.0 Tunnel0
+ip route 192.168.40.0 255.255.255.255 10.0.0.10
+ip route 192.168.50.0 255.255.255.0 Tunnel0
+ip route 209.165.200.0 255.255.255.0 10.0.0.2
+!
+no cdp log mismatch duplex
+!
+snmp-server community public RO
+snmp-server location "Siege"
+snmp-server contact admin@resau.local
+!
+access-list 101 deny   ip 192.168.20.0 0.0.0.255 192.168.30.0 0.0.0.255
+access-list 101 permit ip any any
+!
+control-plane
+!
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+end
